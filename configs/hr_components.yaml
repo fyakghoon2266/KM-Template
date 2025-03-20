@@ -1,0 +1,314 @@
+# HR Agent組件配置文件
+retrievers:
+  # 常見問題
+  NormalQA:
+    collections:
+      - NormalQA
+    top_k: 20
+    qdrant:
+      url: \${QDRANT_URL}
+    embedding:
+      model: \${OPENAI_EMBEDDING_DEPLOYMENT}
+      api_key: \${OPENAI_API_KEY}
+      api_base: \${OPENAI_ENDPOINT}
+  
+  # 婚喪喜慶相關
+  WeddingsFuneralRelated:
+    collections:
+      - WeddingsFuneralRelated
+    top_k: 4
+    qdrant:
+      url: \${QDRANT_URL}
+    embedding:
+      model: \${OPENAI_EMBEDDING_DEPLOYMENT}
+  
+  # 健康保險費
+  HealthInsuranceFee:
+    collections:
+      - healthinsurancefee
+    top_k: 11
+    qdrant:
+      url: \${QDRANT_URL}
+    embedding:
+      model: \${OPENAI_EMBEDDING_DEPLOYMENT}
+  
+  # 健康保險
+  HealthInsurance:
+    collections:
+      - healthinsurance
+    top_k: 5
+    qdrant:
+      url: \${QDRANT_URL}
+    embedding:
+      model: \${OPENAI_EMBEDDING_DEPLOYMENT}
+  
+  # 員工持股
+  EmployeeStockowner:
+    collections:
+      - employeestockowner
+    top_k: 10
+    qdrant:
+      url: \${QDRANT_URL}
+    embedding:
+      model: \${OPENAI_EMBEDDING_DEPLOYMENT}
+  
+  # 出勤相關
+  Attendance:
+    collections:
+      - Attendance
+    top_k: 10
+    qdrant:
+      url: \${QDRANT_URL}
+    embedding:
+      model: \${OPENAI_EMBEDDING_DEPLOYMENT}
+  
+  # 志工服務
+  Volunteer:
+    collections:
+      - volunteer
+    top_k: 10
+    qdrant:
+      url: \${QDRANT_URL}
+    embedding:
+      model: \${OPENAI_EMBEDDING_DEPLOYMENT}
+  
+  # 員工福利
+  Benefit:
+    collections:
+      - benefit
+    top_k: 15
+    qdrant:
+      url: \${QDRANT_URL}
+    embedding:
+      model: \${OPENAI_EMBEDDING_DEPLOYMENT}
+  
+  # 約聘人員離職
+  ContractEmployeeOff:
+    collections:
+      - ContractEmployeeOff
+    top_k: 10
+    qdrant:
+      url: \${QDRANT_URL}
+    embedding:
+      model: \${OPENAI_EMBEDDING_DEPLOYMENT}
+  
+  # 團體保險
+  Groupinsurance:
+    collections:
+      - Groupinsurance
+    top_k: 10
+    qdrant:
+      url: \${QDRANT_URL}
+    embedding:
+      model: \${OPENAI_EMBEDDING_DEPLOYMENT}
+  
+  # 醫療檢查
+  MedicalExamination:
+    collections:
+      - medicalExamination
+    top_k: 6
+    qdrant:
+      url: \${QDRANT_URL}
+    embedding:
+      model: \${OPENAI_EMBEDDING_DEPLOYMENT}
+  
+  # 人事異動
+  PersonalChange:
+    collections:
+      - PersonalChange
+    top_k: 8
+    qdrant:
+      url: \${QDRANT_URL}
+    embedding:
+      model: \${OPENAI_EMBEDDING_DEPLOYMENT}
+  
+  # 海外派駐
+  Oversea:
+    collections:
+      - Oversea
+    top_k: 6
+    qdrant:
+      url: \${QDRANT_URL}
+    embedding:
+      model: \${OPENAI_EMBEDDING_DEPLOYMENT}
+
+routers:
+  # 問題合法性檢查 (對應原CheckQuestionislegal_condition_agent)
+  question_legality_checker:
+    llm:
+      model: \${OPENAI_DEPLOYMENT}
+      temperature: 0.0
+      api_key: \${OPENAI_API_KEY}
+      api_base: \${OPENAI_ENDPOINT}
+    route_options:
+      - continue
+      - rewrite
+    system_prompt: |
+      你是員工問題的評分者，目前問問題的用戶都是國泰公司的內部員工。你將以人資的角度，根據員工的問題來判斷其是否屬於可回答範圍內。
+      
+      可回答範圍包括：
+      - 健保眷屬異動的iHR操作
+      - 勞退自提之iHR操作
+      - 健保補充保費規定
+      - 健保法規規定
+      - 差勤規定（包含差勤系統操作、差勤全解答、公司假別、留職停薪之投保相關事務）
+      - 志工規範
+      - 員工持股信託規定
+      - 福委會業務（包含公司福利項目、旅遊補助、急難救助金、員工子女教育獎助金）
+      - 人事異動業務（包含iRotate系統操作）
+      - 約聘人員離職規定相關
+      - 團保規定（包含保障內容、相關QA、眷屬投保相關）
+      - 人員體檢規定
+      - 婚喪喜慶相關規定
+      - 海外人員駐點規定
+      - iHR系統操作
+      - iRotate系統操作
+      - iForm系統操作
+      - iFlow系統操作
+      - 雙幣信用卡
+      - 國泰CUBE信用卡
+      
+      不可回答範圍包括：
+      - 完全不相關的技術或專業問題
+      - 涉及商業機密或個人隱私的問題
+      - 需要法律、財務或醫療專業人士建議的問題
+      - 與公司業務無關的個人問題
+      
+      請判斷問題是否為可回答的範圍，回答"continue"表示可以回答，回答"rewrite"表示不可回答。
+    prompt_template: |
+      用戶問題: {query}
+      
+      請根據問題內容判斷是否屬於人力資源可回答範圍，只回答一個詞："continue"或"rewrite"，不要有任何解釋。
+
+  # HR知識主題路由器
+  hr_topic_router:
+    llm:
+      model: \${OPENAI_DEPLOYMENT}
+      temperature: 0.0
+      api_key: \${OPENAI_API_KEY}
+      api_base: \${OPENAI_ENDPOINT}
+    route_options:
+      - NormalQA
+      - WeddingsFuneralRelated
+      - HealthInsuranceFee
+      - HealthInsurance
+      - EmployeeStockowner
+      - Attendance
+      - Volunteer
+      - Benefit
+      - ContractEmployeeOff
+      - Groupinsurance
+      - MedicalExamination
+      - PersonalChange
+      - Oversea
+    system_prompt: |
+      你是一個專業的人力資源問題分類器，負責將員工問題分類到最合適的知識庫類別。請根據問題內容，選擇一個最合適的類別：
+      
+      - NormalQA: 常見一般問題
+      - WeddingsFuneralRelated: 婚喪喜慶相關問題
+      - HealthInsuranceFee: 健康保險費用相關問題
+      - HealthInsurance: 健康保險政策和iHR操作相關問題
+      - EmployeeStockowner: 員工持股信託相關問題
+      - Attendance: 差勤管理和請假相關問題
+      - Volunteer: 志工服務相關問題
+      - Benefit: 員工福利和福利申請相關問題
+      - ContractEmployeeOff: 約聘人員離職相關問題
+      - Groupinsurance: 團體保險相關問題
+      - MedicalExamination: 健康檢查相關問題
+      - PersonalChange: 人事異動相關問題
+      - Oversea: 海外派駐人員相關問題
+    prompt_template: |
+      用戶問題: {query}
+      
+      請根據問題內容，選擇一個最合適的類別，只回答類別名稱，不要添加任何解釋。
+
+generators:
+  # QA處理器 (對應原QAagent_agent_node)
+  qa_processor:
+    llm:
+      model: \${OPENAI_DEPLOYMENT}
+      temperature: 0.9
+      api_key: \${OPENAI_API_KEY}
+      api_base: \${OPENAI_ENDPOINT}
+    include_sources: true
+    system_prompt: |
+      你要根據用戶的問題去常見問答集裡面找到前面十個問題，並以下面的格式幫我整理輸出。 
+      格式如下： 
+      （測試問題）「測試問題」：（測試答案）「測試答案」
+    prompt_template: |
+      用戶問題：{query}
+      
+      參考資料：
+      {context}
+      
+      請整理輸出常見問答集中的相關問題和答案。
+
+  # 工具處理器 (對應原Toolagent_agent_node)
+  tool_processor:
+    llm:
+      model: \${OPENAI_DEPLOYMENT}
+      temperature: 0.9
+      api_key: \${OPENAI_API_KEY}
+      api_base: \${OPENAI_ENDPOINT}
+    include_sources: true
+    include_history: true
+    system_prompt: |
+      ## instruction 
+      請判斷，若用戶問題和QA資料有意思幾乎完全一樣的問題，請你直接使用QA資料的內容整合做回覆
+      若QA資料中沒有和用戶問題意思幾乎完全一樣的問題，請整合用戶問題和資料庫資料整合做回覆。
+      並且在最後：嘗試根據用戶的問題，推薦他三個其他用戶常問的常見問題補充在後面，此資料使用QA資料上面的問題來推薦就好，你會根據搜索到的常見問題資料推薦，注意只需要問題不需要答案。並判斷此問題屬於甚麼領域。
+      
+      禁止事項：
+      1. 避免過度信息：不應該一次提供過多信息，應該根據使用者的回應來調整對話進程，逐步解鎖新的信息。
+      2. 避免回答無關問題：如果問題與設計無關，應該禮貌拒絕並將話題引回到當前的設計上。
+      
+      回覆格式:
+      你的回覆
+      --- 
+      建議問題
+      ---
+      問題領域
+    prompt_template: |
+      {history}
+      
+      用戶問題: {query}
+      
+      QA資料：
+      {context}
+      
+      請根據QA資料和專業知識回答用戶問題，並在最後推薦三個相關問題。
+
+  # 無法回答問題處理器 (對應原cantaserquestion_agent_node)
+  cant_answer_handler:
+    llm:
+      model: \${OPENAI_DEPLOYMENT}
+      temperature: 0.9
+      api_key: \${OPENAI_API_KEY}
+      api_base: \${OPENAI_ENDPOINT}
+    include_sources: true
+    include_history: true
+    system_prompt: |
+      你是員工問題的評分者，目前問問題的用戶都是國泰公司的內部員工。你將以人資的角度，根據員工的問題來判斷其是否屬於可回答範圍內。當你接收到一個我們認為不能回應的問題時，請按照以下步驟進行：
+
+      根據問題內容，在知識庫中搜尋是否存在相似的問題。請評估問題是否與以下可回答範圍內的領域相符。
+
+      如果在知識庫中找到與問題相似的條目，請根據相似問題的答案進行回覆，並提供三個你認為最相近且可以回答的問題建議給用戶。
+
+      如果知識庫中沒有相似問題，則拒絕回覆該問題，並告知用戶我們無法回答。
+
+      請務必遵循以下規範：
+      - 必須始終將用戶的隱私和安全放在首位，絕不能洩露敏感資訊、設計細節或討論與自己任務無關的主題。
+      - 絕對不回答與公司業務無關的個人隱私問題或需要專業人員許可的決策。
+      
+      輸出格式：
+      - 如果找到相似問題，請提供問題的答案，並建議三個最相近的問題。
+      - 如果沒有找到相似問題，請拒絕回覆，並輸出拒絕回覆的訊息。
+    prompt_template: |
+      {history}
+      
+      用戶問題：{query}
+      
+      參考資料：
+      {context}
+      
+      請判斷是否可以回答此問題，如果可以，請給出答案和建議問題；如果不可以，請拒絕回答。

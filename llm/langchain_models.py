@@ -37,7 +37,7 @@ class LangChainEmbeddings:
    
         try:
             self.embedding_model = OpenAIEmbeddings(
-                model=self.openai_embedding_deployment,
+                model=self.model,
                 openai_api_key=self.openai_api_key,
                 base_url=self.base_url,
                 **kwargs
@@ -81,11 +81,6 @@ class LangChainLLM:
         """
         # Extract configuration
 
-        self.base_url = os.environ['OPENAI_API_BASE']
-        self.openai_api_key = os.environ['OPENAI_API_KEY']
-        self.openai_deployment = os.environ['OPENAI_DEPLOYMENT']
-        self.openai_embedding_deployment = os.environ['OPENAI_EMBEDDING_DEPLOYMENT']
-
         kwargs = {k: v for k, v in config.items() 
                 if k not in ["model", "api_key", "api_base"]}
         
@@ -93,11 +88,11 @@ class LangChainLLM:
 
         try:
             self.llm = ChatOpenAI(
-                openai_api_base=self.base_url = os.environ['OPENAI_API_BASE'],
-                api_key=self.openai_api_key,
-                model=self.openai_embedding_deployment,
+                openai_api_base=self.openai_api_base,
+                api_key=self.api_key,
+                model=self.model,
                 **kwargs
-            )
+                )
         except Exception as e:
             logger.error(f"Failed to initialize LLM: {e}")
             # Provide default fallback
