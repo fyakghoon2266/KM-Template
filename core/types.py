@@ -47,3 +47,15 @@ class QueryResult(BaseModel):
     answer: Optional[str] = None
     sources: List[Dict[str, Any]] = Field(default_factory=list)
     metadata: Dict[str, Any] = Field(default_factory=dict)
+
+class Message(BaseModel):
+    """對話訊息模型"""
+    role: str  # "user" 或 "assistant"
+    content: str
+
+class ConversationState(BaseModel):
+    """對話狀態模型"""
+    query: str
+    history: List[Message] = Field(default_factory=list)
+    answer: Optional[str] = None
+    documents: Optional[List[Dict[str, Any]]] = None

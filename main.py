@@ -1,6 +1,6 @@
 import os
 import argparse
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, List
 import importlib.util
 import sys
 
@@ -11,19 +11,22 @@ from utils.helpers import save_result
 logger = get_logger(__name__)
 
 
-def run_query(workflow, query: str, parameters: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
-    """Execute query"""
-    # Prepare input state
-    input_state = {"query": query}
+def run_query(workflow, query: str, history: Optional[List[Dict[str, str]]] = None, parameters: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    """執行查詢"""
+    # 準備輸入狀態
+    input_state = {
+        "query": query,
+        "history": history or []
+    }
     
-    # Add additional parameters
+    # 添加額外參數
     if parameters:
         input_state.update(parameters)
     
-    # Execute workflow
-    logger.info(f"Executing query: {query}")
+    # 執行工作流
+    logger.info(f"執行查詢: {query}")
     result = workflow.invoke(input_state)
-    logger.info("Query execution completed")
+    logger.info("查詢執行完成")
     
     return result
 

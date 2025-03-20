@@ -93,9 +93,9 @@ class LangChainLLM:
 
         try:
             self.llm = ChatOpenAI(
-                openai_api_base=self.base_url,
+                openai_api_base=self.base_url = os.environ['OPENAI_API_BASE'],
                 api_key=self.openai_api_key,
-                model=self.openai_deployment,
+                model=self.openai_embedding_deployment,
                 **kwargs
             )
         except Exception as e:

@@ -1,96 +1,162 @@
-# Component configuration
-
-# Retriever configurations
 retrievers:
   default:
     top_k: 5
+    qdrant:
+      url: \${QDRANT_URL}
+    embedding:
+      model: \${OPENAI_EMBEDDING_DEPLOYMENT}
+      api_key: \${OPENAI_API_KEY}
+      api_base: \${OPENAI_ENDPOINT}
 
   normal_qa:
     collections: 
       - NormalQA
     top_k: 4
+    qdrant:
+      url: \${QDRANT_URL}
+    embedding:
+      model: \${OPENAI_EMBEDDING_DEPLOYMENT}
+      api_key: \${OPENAI_API_KEY}
+      api_base: \${OPENAI_ENDPOINT}
 
   wedding_funeral:
     collections: 
       - WeddingsFuneralRelated
     top_k: 3
+    qdrant:
+      url: \${QDRANT_URL}
+    embedding:
+      model: \${OPENAI_EMBEDDING_DEPLOYMENT}
+      api_key: \${OPENAI_API_KEY}
+      api_base: \${OPENAI_ENDPOINT}
 
-# Generator configurations
+# 生成器配置
 generators:
   default:
     llm:
       model: \${OPENAI_DEPLOYMENT}
       temperature: 0.7
       max_tokens: 800
-      # api_key: \${OPENAI_API_KEY}
-      # api_base: \${OPENAI_ENDPOINT}
+      api_key: \${OPENAI_API_KEY}
+      api_base: \${OPENAI_ENDPOINT}
     include_sources: true
+    include_history: true
+    max_history_turns: 5
     system_prompt: |
-      You are a helpful AI assistant. Your task is to answer user questions based on the provided reference information.
-      If the provided information is insufficient to answer the question, please indicate that you don't know, rather than making up information.
+      你是一個有用的AI助手。你的任務是基於提供的參考信息回答用戶的問題。
+      如果提供的信息不足以回答問題，請說明無法回答，不要編造信息。
 
   bank_assistant:
     llm:
       model: \${OPENAI_DEPLOYMENT}
       temperature: 0.2
       max_tokens: 800
-      # api_key: \${OPENAI_API_KEY}
-      # api_base: \${OPENAI_ENDPOINT}
+      api_key: \${OPENAI_API_KEY}
+      api_base: \${OPENAI_ENDPOINT}
     include_sources: true
+    include_history: true
+    max_history_turns: 5
     system_prompt: |
-      You are a bank customer service assistant. Please answer customer questions based on the provided reference materials.
-      For questions about weddings and funerals, please refer specifically to relevant bank regulations.
+      你是一個銀行客服助手，請根據提供的參考資料回答客戶問題。
+      你可以回答：
+      1. 銀行業務相關問題
+      2. 人力資源(HR)相關問題（如請假、福利等）
+      3. 日常簡單問題和閒聊
+      
+      如果是參考資料中有的銀行專業問題，請依據資料回答。
+      如果是日常聊天或簡單問題，可以直接友善回應，不需參考資料。
+      如果無法從參考資料中找到有關專業問題的答案，請誠實地表示你不知道。
+    prompt_template: |
+      {history}
+      
+      客戶問題: {query}
 
+      參考資料:
+      {context}
+
+      請根據上述參考資料或你的一般知識回答問題。如果是閒聊或簡單問題，可以自然回應；如果是專業問題，請嚴格參考資料回答。
+
+  # 拒絕生成器 - 用於不合規問題
   rejection_handler:
     llm:
       model: \${OPENAI_DEPLOYMENT}
       temperature: 0.2
+      api_key: \${OPENAI_API_KEY}
+      api_base: \${OPENAI_ENDPOINT}
+    include_history: true
+    max_history_turns: 5
     system_prompt: |
-      你是一個HR人資助手，只能回答與HR業務相關的問題，例如請假婚節禮金等等地都算在業務範圍。
+      你是一個銀行客服助手，主要回答銀行相關問題、人力資源(HR)問題以及日常簡單問題。
     prompt_template: |
+      {history}
+      
       用戶問題: {query}
       
-      這個問題似乎不屬於HR業務範疇。請禮貌地告知用戶，並建議他們提出與HR服務相關的問題。
+      這個問題似乎是關於專業領域的技術性問題，超出了我的知識範圍。
 
-# Router configurations
+      請以友善、禮貌的方式回應用戶，說明你主要處理：
+      1. 銀行業務相關問題
+      2. 人力資源(HR)相關問題
+      3. 日常簡單問題和聊天
+
+      並邀請用戶提出這些範圍內的問題。
+
+# 路由器配置
 routers:
   bank_router:
     llm:
+      model: \${OPENAI_DEPLOYMENT}
       temperature: 0.0
+      api_key: \${OPENAI_API_KEY}
+      api_base: \${OPENAI_ENDPOINT}
     route_options:
       - normal_qa
       - wedding_funeral
     system_prompt: |
-      You are an intelligent routing system responsible for directing user questions to the appropriate knowledge base.
+      你是一個智慧路由系統，負責將用戶問題導向正確的知識庫。
+    prompt_template: |
+      請根據用戶問題選擇最合適的知識庫:
+      - normal_qa: 一般常見問題及人力資源相關問題
+      - wedding_funeral: 婚喪喜慶相關問題
+      
+      用戶問題: {query}
+      
+      只回覆一個選項名稱，不要加任何解釋。
 
-  # 合法性檢查路由器
+  # 合法性檢查路由器 - 調整標準
   legality_checker:
     llm:
       model: \${OPENAI_DEPLOYMENT}
       temperature: 0.0
+      api_key: \${OPENAI_API_KEY}
+      api_base: \${OPENAI_ENDPOINT}
     route_options:
       - legal
       - illegal
     system_prompt: |
-      你是一個專業的問題審核員，負責判斷用戶問題是否符合銀行業務規範。
+      你是一個專業的問題審核員，負責判斷用戶問題是否適合一個銀行業務或一般聊天助手回答。
     prompt_template: |
-      請判斷以下問題是否是合法的HR業務相關問題。
-      如果是HR業務相關的合法問題，選擇"legal"；
-      如果不是HR業務相關或不合規的問題，選擇"illegal"。
+      請判斷以下問題是否適合由一個銀行客服/聊天助手回答。
+
+      規則：
+      1. 日常聊天類問題（如打招呼、閒聊）應判斷為 "legal"
+      2. 簡單的一般性問題（如詢問天氣、簡單常識）應判斷為 "legal"
+      3. 銀行業務和人力資源(HR)相關問題應判斷為 "legal"
+      4. 其他非銀行業務的專業領域問題（如專業技術、醫學、機械製造等）應判斷為 "illegal"
       
       用戶問題: {query}
       
-      只回答"legal"或"illegal"，不要有任何解釋。
+      只回答一個詞："legal" 或 "illegal"，不要解釋理由。
 
-# Reranker configurations
+# 重排序器配置
 rerankers:
   default:
     type: simple
     top_k: 3
     embedding:
       model: \${OPENAI_EMBEDDING_DEPLOYMENT}
-      # api_key: \${OPENAI_API_KEY}
-      # api_base: \${OPENAI_ENDPOINT}
+      api_key: \${OPENAI_API_KEY}
+      api_base: \${OPENAI_ENDPOINT}
   
   llm_reranker:
     type: llm
@@ -98,3 +164,5 @@ rerankers:
     llm:
       model: \${OPENAI_DEPLOYMENT}
       temperature: 0.0
+      api_key: \${OPENAI_API_KEY}
+      api_base: \${OPENAI_ENDPOINT}
