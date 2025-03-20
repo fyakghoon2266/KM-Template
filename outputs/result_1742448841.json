@@ -1,0 +1,152 @@
+{
+  "query": "我要怎麼請特休假????",
+  "route": "normal_qa",
+  "documents": [
+    {
+      "id": "15c3d9a4-8ca6-4a55-8089-993b0b18802e",
+      "content": "業務範疇: 人事異動\n測試問題: 代行科主管要上簽公文嗎?\n測試答案: 請參考iRotate人員調動系統操作手冊及【國泰世華銀行分層負責表通則】，請至iRotate人員調動系統由單位提報，並依分層負責表科主管程序辦理，系統簽核至總經理核定",
+      "metadata": {
+        "metadata": {
+          "loc": {
+            "lines": {
+              "to": 3,
+              "from": 1
+            }
+          },
+          "line": 84,
+          "blobType": "",
+          "source": "blob"
+        }
+      },
+      "score": 0.031738386,
+      "source_collection": "NormalQA"
+    },
+    {
+      "id": "8b4d5c9b-aedc-4d79-a7fb-8af523cdf80b",
+      "content": "業務範疇: 人事異動\n測試問題: 人選報到要怎麼拉進安控？\n測試答案: 全行資訊網>系統分類總覽>安全管理系統>行員資料維護>待新增名單(新進/復職人員)",
+      "metadata": {
+        "metadata": {
+          "blobType": "",
+          "source": "blob",
+          "loc": {
+            "lines": {
+              "to": 3,
+              "from": 1
+            }
+          },
+          "line": 71
+        }
+      },
+      "score": 0.029877357,
+      "source_collection": "NormalQA"
+    },
+    {
+      "id": "5ef1be48-18f3-474c-974f-fc7ebd0771d2",
+      "content": "業務範疇: 人事異動\n測試問題: 集團徵調可以使用iRotate嗎?\n測試答案: iRotate人員調動系統僅試用國泰世華銀行員工，並不試用其他子公司，故需要使用紙本或iFlow系統進行徵調。",
+      "metadata": {
+        "metadata": {
+          "line": 78,
+          "loc": {
+            "lines": {
+              "to": 3,
+              "from": 1
+            }
+          },
+          "blobType": "",
+          "source": "blob"
+        }
+      },
+      "score": 0.026972134,
+      "source_collection": "NormalQA"
+    },
+    {
+      "id": "9d3dbcfc-87d6-4dcb-8ffa-096a103fce65",
+      "content": "業務範疇: 人事異動\n測試問題: 專案經理可以兼任、代理科主管職務嗎\n測試答案: 請參考iRotate人員調動系統操作手冊及【國泰世華銀行分層負責表通則】，請至iRotate人員調動系統由單位提報，並依分層負責表科主管程序辦理，系統簽核至總經理核定",
+      "metadata": {
+        "metadata": {
+          "source": "blob",
+          "loc": {
+            "lines": {
+              "to": 3,
+              "from": 1
+            }
+          },
+          "line": 85,
+          "blobType": ""
+        }
+      },
+      "score": 0.025607787,
+      "source_collection": "NormalQA"
+    }
+  ],
+  "retriever_collections": [
+    "NormalQA"
+  ],
+  "answer": "請特休假需要依照公司的請假流程進行。請參考以下步驟：\n\n1. 登入公司的內部系統（例如iFlow系統）。\n2. 在系統中找到請假申請的選項。\n3. 填寫請假申請表，選擇特休假作為請假類型，並填寫請假的起始日期和結束日期。\n4. 提交申請，等待主管審核。\n\n具體的操作步驟可能會因公司內部系統的不同而有所差異，建議參考公司內部的操作手冊或向人事部門詢問詳細流程。",
+  "sources": [
+    {
+      "collection": "NormalQA",
+      "metadata": {
+        "metadata": {
+          "loc": {
+            "lines": {
+              "to": 3,
+              "from": 1
+            }
+          },
+          "line": 84,
+          "blobType": "",
+          "source": "blob"
+        }
+      }
+    },
+    {
+      "collection": "NormalQA",
+      "metadata": {
+        "metadata": {
+          "blobType": "",
+          "source": "blob",
+          "loc": {
+            "lines": {
+              "to": 3,
+              "from": 1
+            }
+          },
+          "line": 71
+        }
+      }
+    },
+    {
+      "collection": "NormalQA",
+      "metadata": {
+        "metadata": {
+          "line": 78,
+          "loc": {
+            "lines": {
+              "to": 3,
+              "from": 1
+            }
+          },
+          "blobType": "",
+          "source": "blob"
+        }
+      }
+    },
+    {
+      "collection": "NormalQA",
+      "metadata": {
+        "metadata": {
+          "source": "blob",
+          "loc": {
+            "lines": {
+              "to": 3,
+              "from": 1
+            }
+          },
+          "line": 85,
+          "blobType": ""
+        }
+      }
+    }
+  ]
+}

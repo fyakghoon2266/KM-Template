@@ -1,0 +1,152 @@
+{
+  "query": "我要怎麼請特休",
+  "route": "normal_qa",
+  "documents": [
+    {
+      "id": "15c3d9a4-8ca6-4a55-8089-993b0b18802e",
+      "content": "業務範疇: 人事異動\n測試問題: 代行科主管要上簽公文嗎?\n測試答案: 請參考iRotate人員調動系統操作手冊及【國泰世華銀行分層負責表通則】，請至iRotate人員調動系統由單位提報，並依分層負責表科主管程序辦理，系統簽核至總經理核定",
+      "metadata": {
+        "metadata": {
+          "source": "blob",
+          "blobType": "",
+          "line": 84,
+          "loc": {
+            "lines": {
+              "from": 1,
+              "to": 3
+            }
+          }
+        }
+      },
+      "score": 0.018459013,
+      "source_collection": "NormalQA"
+    },
+    {
+      "id": "5ef1be48-18f3-474c-974f-fc7ebd0771d2",
+      "content": "業務範疇: 人事異動\n測試問題: 集團徵調可以使用iRotate嗎?\n測試答案: iRotate人員調動系統僅試用國泰世華銀行員工，並不試用其他子公司，故需要使用紙本或iFlow系統進行徵調。",
+      "metadata": {
+        "metadata": {
+          "source": "blob",
+          "blobType": "",
+          "line": 78,
+          "loc": {
+            "lines": {
+              "from": 1,
+              "to": 3
+            }
+          }
+        }
+      },
+      "score": 0.015317912,
+      "source_collection": "NormalQA"
+    },
+    {
+      "id": "d15e6bb5-8034-4e35-842f-2c01dad782a0",
+      "content": "業務範疇: 補充保費\n測試問題: 給付時員工已離職，是否須扣取？\n測試答案: 離職比照在職員工方式計算、扣取；以轉出當月投保金額4倍計算。",
+      "metadata": {
+        "metadata": {
+          "line": 9,
+          "blobType": "",
+          "loc": {
+            "lines": {
+              "to": 3,
+              "from": 1
+            }
+          },
+          "source": "blob"
+        }
+      },
+      "score": 0.0146082565,
+      "source_collection": "NormalQA"
+    },
+    {
+      "id": "f881a92a-ae50-4442-8f86-bf7f02d879af",
+      "content": "業務範疇: 差勤\n測試問題: 那我還不確定要休在哪天，要怎麼排假?\n測試答案: 建議將特休依基準日由後往前排，未來確定要休哪幾天特休時再採請假變更的方式處理",
+      "metadata": {
+        "metadata": {
+          "source": "blob",
+          "line": 145,
+          "loc": {
+            "lines": {
+              "from": 1,
+              "to": 3
+            }
+          },
+          "blobType": ""
+        }
+      },
+      "score": 0.014257553,
+      "source_collection": "NormalQA"
+    }
+  ],
+  "retriever_collections": [
+    "NormalQA"
+  ],
+  "answer": "要請特休的話，建議你先將特休依基準日由後往前排。這樣可以確保你不會錯過使用特休的期限。如果未來確定要休哪幾天特休時，可以再採請假變更的方式處理。這樣的安排可以讓你更靈活地使用特休時間。",
+  "sources": [
+    {
+      "collection": "NormalQA",
+      "metadata": {
+        "metadata": {
+          "source": "blob",
+          "blobType": "",
+          "line": 84,
+          "loc": {
+            "lines": {
+              "from": 1,
+              "to": 3
+            }
+          }
+        }
+      }
+    },
+    {
+      "collection": "NormalQA",
+      "metadata": {
+        "metadata": {
+          "source": "blob",
+          "blobType": "",
+          "line": 78,
+          "loc": {
+            "lines": {
+              "from": 1,
+              "to": 3
+            }
+          }
+        }
+      }
+    },
+    {
+      "collection": "NormalQA",
+      "metadata": {
+        "metadata": {
+          "line": 9,
+          "blobType": "",
+          "loc": {
+            "lines": {
+              "to": 3,
+              "from": 1
+            }
+          },
+          "source": "blob"
+        }
+      }
+    },
+    {
+      "collection": "NormalQA",
+      "metadata": {
+        "metadata": {
+          "source": "blob",
+          "line": 145,
+          "loc": {
+            "lines": {
+              "from": 1,
+              "to": 3
+            }
+          },
+          "blobType": ""
+        }
+      }
+    }
+  ]
+}

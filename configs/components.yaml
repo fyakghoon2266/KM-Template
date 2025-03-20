@@ -1,0 +1,100 @@
+# Component configuration
+
+# Retriever configurations
+retrievers:
+  default:
+    top_k: 5
+
+  normal_qa:
+    collections: 
+      - NormalQA
+    top_k: 4
+
+  wedding_funeral:
+    collections: 
+      - WeddingsFuneralRelated
+    top_k: 3
+
+# Generator configurations
+generators:
+  default:
+    llm:
+      model: \${OPENAI_DEPLOYMENT}
+      temperature: 0.7
+      max_tokens: 800
+      # api_key: \${OPENAI_API_KEY}
+      # api_base: \${OPENAI_ENDPOINT}
+    include_sources: true
+    system_prompt: |
+      You are a helpful AI assistant. Your task is to answer user questions based on the provided reference information.
+      If the provided information is insufficient to answer the question, please indicate that you don't know, rather than making up information.
+
+  bank_assistant:
+    llm:
+      model: \${OPENAI_DEPLOYMENT}
+      temperature: 0.2
+      max_tokens: 800
+      # api_key: \${OPENAI_API_KEY}
+      # api_base: \${OPENAI_ENDPOINT}
+    include_sources: true
+    system_prompt: |
+      You are a bank customer service assistant. Please answer customer questions based on the provided reference materials.
+      For questions about weddings and funerals, please refer specifically to relevant bank regulations.
+
+  rejection_handler:
+    llm:
+      model: \${OPENAI_DEPLOYMENT}
+      temperature: 0.2
+    system_prompt: |
+      你是一個HR人資助手，只能回答與HR業務相關的問題，例如請假婚節禮金等等地都算在業務範圍。
+    prompt_template: |
+      用戶問題: {query}
+      
+      這個問題似乎不屬於HR業務範疇。請禮貌地告知用戶，並建議他們提出與HR服務相關的問題。
+
+# Router configurations
+routers:
+  bank_router:
+    llm:
+      temperature: 0.0
+    route_options:
+      - normal_qa
+      - wedding_funeral
+    system_prompt: |
+      You are an intelligent routing system responsible for directing user questions to the appropriate knowledge base.
+
+  # 合法性檢查路由器
+  legality_checker:
+    llm:
+      model: \${OPENAI_DEPLOYMENT}
+      temperature: 0.0
+    route_options:
+      - legal
+      - illegal
+    system_prompt: |
+      你是一個專業的問題審核員，負責判斷用戶問題是否符合銀行業務規範。
+    prompt_template: |
+      請判斷以下問題是否是合法的HR業務相關問題。
+      如果是HR業務相關的合法問題，選擇"legal"；
+      如果不是HR業務相關或不合規的問題，選擇"illegal"。
+      
+      用戶問題: {query}
+      
+      只回答"legal"或"illegal"，不要有任何解釋。
+
+# Reranker configurations
+rerankers:
+  default:
+    type: simple
+    top_k: 3
+    embedding:
+      model: \${OPENAI_EMBEDDING_DEPLOYMENT}
+      # api_key: \${OPENAI_API_KEY}
+      # api_base: \${OPENAI_ENDPOINT}
+  
+  llm_reranker:
+    type: llm
+    top_k: 4
+    llm:
+      model: \${OPENAI_DEPLOYMENT}
+      temperature: 0.0
