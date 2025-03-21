@@ -1,8 +1,0 @@
-{
-  "query": "我要怎麼請特休",
-  "route": "normal_qa",
-  "error": "Error code: 401 - {'error': {'message': 'Authentication Error, Invalid proxy server token passed. valid_token=None.', 'type': 'auth_error', 'param': 'None', 'code': '401'}}",
-  "documents": [],
-  "answer": "Unable to generate a response: An error occurred connecting to the AI service. Please check API credentials and network connection.",
-  "sources": []
-}

@@ -24,10 +24,6 @@ class LangChainEmbeddings:
                 - api_base: OpenAI API base URL (optional)
                 - other_params: Other parameters passed directly to OpenAIEmbeddings
         """
-        self.base_url = os.environ['OPENAI_API_BASE']
-        self.openai_api_key = os.environ['OPENAI_API_KEY']
-        self.openai_deployment = os.environ['OPENAI_DEPLOYMENT']
-        self.openai_embedding_deployment = os.environ['OPENAI_EMBEDDING_DEPLOYMENT']
 
         # Extract configuration
         kwargs = {k: v for k, v in config.items() 
@@ -37,9 +33,9 @@ class LangChainEmbeddings:
    
         try:
             self.embedding_model = OpenAIEmbeddings(
-                model=self.model,
-                openai_api_key=self.openai_api_key,
-                base_url=self.base_url,
+                model=os.environ['OPENAI_EMBEDDING_DEPLOYMENT'],
+                openai_api_key=os.environ['OPENAI_API_KEY'],
+                base_url=os.environ['OPENAI_API_BASE'],
                 **kwargs
             )
         except Exception as e:
@@ -85,12 +81,11 @@ class LangChainLLM:
                 if k not in ["model", "api_key", "api_base"]}
         
         # Initialize LangChain LLM
-
         try:
             self.llm = ChatOpenAI(
-                openai_api_base=self.openai_api_base,
-                api_key=self.api_key,
-                model=self.model,
+                openai_api_base=os.environ['OPENAI_API_BASE'],
+                api_key=os.environ['OPENAI_API_KEY'],
+                model=os.environ['OPENAI_DEPLOYMENT'],
                 **kwargs
                 )
         except Exception as e:
