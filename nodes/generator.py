@@ -1,4 +1,4 @@
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, List
 from core.base import Node
 from llm.langchain_models import LangChainLLM
 from utils.logging import get_logger

@@ -1,12 +1,9 @@
-from typing import Dict, Any, List, Optional
-import re
+from typing import Dict, Any
 from core.base import Node
 from llm.langchain_models import LangChainLLM
 from utils.logging import get_logger
 
-# Simplified logger setup if logging module is not available:
-import logging
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 class LLMRouter(Node):
     """LLM router node, uses language model to make routing decisions"""

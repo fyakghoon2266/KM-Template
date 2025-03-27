@@ -3,7 +3,6 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import importlib.util
 import sys
-import os
 from pathlib import Path
 
 from core.component_manager import ComponentManager

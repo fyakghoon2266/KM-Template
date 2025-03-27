@@ -1,5 +1,4 @@
 from typing import Dict, Any, List, Optional
-import logging
 from langchain_qdrant import QdrantVectorStore as LCQdrantVectorStore
 from qdrant_client import QdrantClient, models
 from core.base import VectorStore

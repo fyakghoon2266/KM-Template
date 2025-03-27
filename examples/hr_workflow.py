@@ -3,9 +3,9 @@ from core.component_manager import ComponentManager
 from core.workflow_builder import WorkflowBuilder
 from nodes.custom import FunctionNode
 from langgraph.graph import END
-import logging
+from utils.logging import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 def build_workflow(component_manager):
     """
@@ -168,7 +168,6 @@ def build_workflow(component_manager):
 
 if __name__ == "__main__":
     # 可以直接運行此文件進行測試
-    import os
     from dotenv import load_dotenv
     import logging
     

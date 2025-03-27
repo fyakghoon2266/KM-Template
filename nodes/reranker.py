@@ -1,4 +1,4 @@
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, List
 import numpy as np
 from core.base import Node
 from llm.langchain_models import LangChainLLM, LangChainEmbeddings

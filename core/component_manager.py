@@ -1,6 +1,5 @@
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any
 import os
-import yaml
 
 from core.config import ConfigLoader
 from utils.logging import get_logger

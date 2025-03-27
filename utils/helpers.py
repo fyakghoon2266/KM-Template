@@ -1,6 +1,6 @@
 import os
 import json
-from typing import Dict, Any, List, Optional, Union
+from typing import Dict, Any, List, Optional
 import yaml
 import time
 from pathlib import Path

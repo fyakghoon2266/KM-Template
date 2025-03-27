@@ -1,0 +1,57 @@
+# multi_llm_router_components.yaml
+routers:
+  knowledge_router:
+    llm:
+      model: ${OPENAI_DEPLOYMENT}
+      temperature: 0.0
+      api_key: ${OPENAI_API_KEY}
+      api_base: ${OPENAI_ENDPOINT}
+    route_options:
+      - NormalQA
+      - HealthInsuranceFee
+    system_prompt: |
+      你是一個知識庫路由器，請根據用戶查詢決定應查詢哪個 collection。
+    prompt_template: |
+      用戶問題: {query}
+      
+      請選擇最合適的 collection，僅回覆 "NormalQA" 或 "HealthInsuranceFee"。
+    default_route: NormalQA
+
+retrievers:
+  NormalQA:
+    collections:
+      - NormalQA
+    top_k: 20
+    qdrant:
+      url: ${QDRANT_URL}
+    embedding:
+      model: ${OPENAI_EMBEDDING_DEPLOYMENT}
+      api_key: ${OPENAI_API_KEY}
+      api_base: ${OPENAI_ENDPOINT}
+
+  HealthInsuranceFee:
+    collections:
+      - healthinsurancefee
+    top_k: 11
+    qdrant:
+      url: ${QDRANT_URL}
+    embedding:
+      model: ${OPENAI_EMBEDDING_DEPLOYMENT}
+
+generators:
+  default:
+    llm:
+      model: ${OPENAI_DEPLOYMENT}
+      temperature: 0.7
+      api_key: ${OPENAI_API_KEY}
+      api_base: ${OPENAI_ENDPOINT}
+    include_sources: true
+    system_prompt: |
+      你是一個回答生成器，請根據檢索結果生成最精確的回答。
+    prompt_template: |
+      用戶問題：{query}
+      
+      參考資料：
+      {context}
+      
+      請生成最合適的回答，不要添加其他解釋。

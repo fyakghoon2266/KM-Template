@@ -1,4 +1,4 @@
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, List
 
 from core.base import Node
 from vectorstores.qdrant_store import QdrantVectorStore
